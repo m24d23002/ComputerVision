@@ -6,3 +6,5 @@ numpy
 pycocotools
 tensorflow
 tensorflow-hub
+scikit-image
+imutils
