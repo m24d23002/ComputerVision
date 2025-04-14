@@ -9,7 +9,7 @@ from train import buildModel
 import os
 
 # Load COCO category mappings
-annotation_file = './COCO/annotations/instances_val2017.json'
+annotation_file = 'instances_val2017.json'
 coco = COCO(annotation_file)
 cat_ids = sorted(coco.getCatIds())
 index_to_cat_id = {i: cat_id for i, cat_id in enumerate(cat_ids)}
