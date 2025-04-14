@@ -92,4 +92,5 @@ venv/*
 *.sublime-workspace
 *.sublime-project
 
-# macOS specific file
+# training and dataset
+COCO/
