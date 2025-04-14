@@ -5,10 +5,8 @@ import cv2
 import tensorflow as tf
 from PIL import Image
 from pycocotools.coco import COCO
+from train import buildModel
 import os
-
-# Load the trained model
-model = tf.keras.models.load_model('models/my_model.keras')
 
 # Load COCO category mappings
 annotation_file = './COCO/annotations/instances_val2017.json'
@@ -17,7 +15,17 @@ cat_ids = sorted(coco.getCatIds())
 index_to_cat_id = {i: cat_id for i, cat_id in enumerate(cat_ids)}
 cat_id_to_name = {cat['id']: cat['name'] for cat in coco.loadCats(cat_ids)}
 
-def detect_objects(image):
+
+
+# Cache the model creation
+@st.cache_resource
+def get_model():
+    return buildModel()
+
+# Create the model
+model = get_model()
+
+def detect_objects(model, image):
     image_resized = cv2.resize(image, (224, 224))  # Resize to model's input size
     image_resized = image_resized / 255.0  # Normalize
     image_input = np.expand_dims(image_resized, axis=0)
@@ -58,7 +66,7 @@ def main():
             image_np = np.array(image)
 
             # Detect objects
-            detected_image = detect_objects(image_np)
+            detected_image = detect_objects(model, image_np)
 
             # Display the original image with bounding boxes
             st.image(detected_image, channels="RGB", caption="Detected Objects", use_column_width=True)
